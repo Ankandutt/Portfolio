@@ -230,11 +230,11 @@ body {
 
 
 .reveal-word:nth-child(1) {
-    animation-delay: 0.1s;
+    animation-delay: 0.2s;
 }
 
 .reveal-word:nth-child(2) {
-    animation-delay: 0.3s;
+    animation-delay: 0.4s;
 }
 
 @keyframes wordReveal {
