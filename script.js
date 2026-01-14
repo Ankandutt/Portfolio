@@ -109,3 +109,33 @@ backToTopBtn.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+// Stat Counter Animation
+const stats = document.querySelectorAll('.stat-num');
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const target = entry.target;
+            const countTo = parseInt(target.getAttribute('data-target'));
+            const suffix = target.getAttribute('data-suffix') || '';
+            let current = 0;
+            const duration = 800; // 0.8 seconds (Faster)
+            const stepTime = 20; // 20ms step for smoother transition
+            const totalSteps = duration / stepTime;
+            const increment = countTo / totalSteps;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= countTo) {
+                    target.innerText = countTo + suffix;
+                    clearInterval(timer);
+                } else {
+                    target.innerText = Math.floor(current) + suffix;
+                }
+            }, stepTime);
+
+            statsObserver.unobserve(target);
+        }
+    });
+}, { threshold: 0.2 });
+
+stats.forEach(stat => statsObserver.observe(stat));
