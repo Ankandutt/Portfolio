@@ -28,8 +28,8 @@ const observer = new IntersectionObserver((entries) => {
         }
     });
 }, {
-    threshold: 0.5, // Trigger when 50% visible
-    rootMargin: '-10% 0px -10% 0px' // Tighter margin for "focus" effect
+    threshold: 0.1, // Trigger when 10% visible - much safer for mobile
+    rootMargin: '0px 0px -100px 0px' // Allow triggering slightly before it enters the viewport
 });
 
 // Select all elements to animate
