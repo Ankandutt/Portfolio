@@ -16,17 +16,34 @@ const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('reveal');
-            observer.unobserve(entry.target);
+            // For general sections, we only animate once
+            if (!entry.target.classList.contains('timeline-item')) {
+                observer.unobserve(entry.target);
+            }
+        } else {
+            // For timeline items, remove reveal when out of view to satisfy "one at a time"
+            if (entry.target.classList.contains('timeline-item')) {
+                entry.target.classList.remove('reveal');
+            }
         }
     });
-}, observerOptions);
+}, {
+    threshold: 0.5, // Trigger when 50% visible
+    rootMargin: '-10% 0px -10% 0px' // Tighter margin for "focus" effect
+});
 
 // Select all elements to animate
-const sections = document.querySelectorAll('.section, .hero-content, .hero-visual, .project-card, .skill-category, .timeline-item');
-sections.forEach(section => {
+const generalSections = document.querySelectorAll('.section, .hero-content, .hero-visual, .project-card, .skill-category');
+generalSections.forEach(section => {
     section.classList.add('fade-in');
     observer.observe(section);
 });
+
+const timelineItems = document.querySelectorAll('.timeline-item');
+timelineItems.forEach(item => {
+    observer.observe(item);
+});
+
 
 // Navbar background change on scroll
 const navbar = document.querySelector('.navbar');
@@ -75,3 +92,20 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
+// Back to Top Logic
+const backToTopBtn = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.add('visible');
+    } else {
+        backToTopBtn.classList.remove('visible');
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
